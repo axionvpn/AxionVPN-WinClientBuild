@@ -1,0 +1,10 @@
+*.tmp
+image*
+sources
+tools
+tmp
+*.exe
+*.gz
+*.pfx
+*.cer
+*.crt

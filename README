@@ -1,0 +1,22 @@
+AxionVPN buildsystems, based off of the OpenVPN Project build system
+
+About
+
+    These directories contain scripts to help build and
+    package AxionVPN and it's dependencies for various
+    hardware platforms and operating systems (e.g. Windows,
+    ARM). You do not need any of these scripts if you're
+    building a native version of OpenVPN on a UNIX-like
+    operatingsystem.
+
+    Thorough documentation is available in the OpenVPN wiki:
+
+    <https://community.openvpn.net/openvpn>
+
+Directories
+
+    The "windows-nsis" subdir contains scripts to
+    cross-compile and package AxionVPN for Windows.
+
+    Please refer to the README files in the subdirectories
+    for further information.
