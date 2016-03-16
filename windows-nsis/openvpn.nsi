@@ -184,12 +184,17 @@ ReserveFile "install-whirl.bmp"
 ;Pre-install section
 
 Section -pre
+
+	;Kill all the AxionVPN Processes anyway
+	${nsProcess::KillProcess} "AxionVPN.exe" $R0
+
+
 	Push $0 ; for FindWindow
-	FindWindow $0 "OpenVPN-GUI"
+	FindWindow $0 "AxionVPN"
 	StrCmp $0 0 guiNotRunning
 
-	MessageBox MB_YESNO|MB_ICONEXCLAMATION "To perform the specified operation, OpenVPN-GUI needs to be closed. Shall I close it?" /SD IDYES IDNO guiEndNo
-	DetailPrint "Closing OpenVPN-GUI..."
+	MessageBox MB_YESNO|MB_ICONEXCLAMATION "To perform the specified operation, AxionVPN needs to be closed. Shall I close it?" /SD IDYES IDNO guiEndNo
+	DetailPrint "Closing AxionVPN..."
 	Goto guiEndYes
 
 	guiEndNo:
@@ -197,7 +202,7 @@ Section -pre
 
 	guiEndYes:
 		; user wants to close GUI as part of install/upgrade
-		FindWindow $0 "OpenVPN-GUI"
+		FindWindow $0 "AxionVPN"
 		IntCmp $0 0 guiClosed
 		SendMessage $0 ${WM_CLOSE} 0 0
 		Sleep 100
@@ -209,11 +214,11 @@ Section -pre
 
 	guiNotRunning:
 		; check for running openvpn.exe processes
-		${nsProcess::FindProcess} "openvpn.exe" $R0
-		${If} $R0 == 0
-			MessageBox MB_OK|MB_ICONEXCLAMATION "The installation cannot continue as OpenVPN is currently running. Please close all OpenVPN instances and re-run the installer."
-			Quit
-		${EndIf}
+		${nsProcess::FindProcess} "AxionVPN.exe" $R0
+		;${If} $R0 == 0
+			;MessageBox MB_OK|MB_ICONEXCLAMATION "The installation cannot continue as AxionVPN is currently running. Please close all AxionVPN instances and re-run the installer."
+			;Quit
+		;${EndIf}
 
 		; openvpn.exe + GUI not running/closed successfully, carry on with install/upgrade
 	

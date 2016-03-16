@@ -84,9 +84,9 @@ download1() {
 	local url="$1"
 	local prefix="$(basename "${url}" | sed 's/-[0-9].*//g')"
 
-	#if ! [ -n "$(ls "${SOURCESROOT}/${prefix}-"[0-9]* 2> /dev/null)" ]; then
-	#	geturl ${url} || die "Cannot download ${url}"
-	#fi
+	if ! [ -n "$(ls "${SOURCESROOT}/${prefix}-"[0-9]* 2> /dev/null)" ]; then
+		geturl ${url} || die "Cannot download ${url}"
+	fi
 }
 
 download() {
@@ -129,7 +129,6 @@ create_layout() {
 	BUILDROOT="$(get_full_path "${BUILDROOT}")"
 	SOURCESROOT="$(get_full_path "${SOURCESROOT}")"
 	IMAGEROOT="$(get_full_path "${IMAGEROOT}")"
-
 }
 
 extract() {
@@ -318,6 +317,16 @@ copy_docs() {
 	cp "${SCRIPTROOT}/README" "${SCRIPTROOT}/COPYING"* "${OPENVPN_ROOT}/share/doc/package" || die "package docs"
 }
 
+copy_sparkle() {
+	echo "Copying Sparkle"
+	mkdir -p "${OPENVPN_ROOT}/bin"
+	#${TMPDIR}/build-${arch}/openvpn-gui-6/${arch}/WinSparkle.dll
+	if [ -f "${SCRIPTROOT}/WinSparkle.dll" ]
+	then 
+		cp "${SCRIPTROOT}/WinSparkle.dll" "${OPENVPN_ROOT}/bin" || die "copy sparkle"
+	fi
+}	
+
 copy_sources() {
 	echo "Copying sources"
 	mkdir -p "${IMAGEROOT}/src/patches"
@@ -338,7 +347,6 @@ pack() {
 	(cd "${IMAGEROOT}" && find src ) | bzip2 > "${IMAGEROOT}/openvpn-${X}-${BUILD_VERSION}-srclist.bz2" || die "srclist"
 	tar -cjf "${IMAGEROOT}/openvpn-${X}-${BUILD_VERSION}-src.tar.bz2" -C "${IMAGEROOT}" src || die "src"
 	tar -cjf "${IMAGEROOT}/openvpn-${X}-${BUILD_VERSION}-bin.tar.bz2" -C "${OPENVPN_ROOT}" . || die "openvpn"
-	echo "Done packing"
 }
 
 aix_common() {
@@ -374,6 +382,7 @@ main() {
 	if [ -z "${DO_ONLY_DEPS}" ]; then
 		build_openvpn
 		[ -n "${BUILD_FOR_WINDOWS}" ] && build_openvpn_gui
+		copy_sparkle
 		copy_docs
 		copy_sources
 		clean_empty_dirs

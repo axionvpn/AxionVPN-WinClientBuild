@@ -1,6 +1,6 @@
 #!/bin/sh
 
-AXION_VERSION="0.9.5"
+AXION_VERSION="1.0.5"
 
 MAKENSIS="${MAKENSIS:-makensis}"
 OSSLSIGNCODE="${OSSLSIGNCODE:-osslsigncode}"
